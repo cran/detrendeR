@@ -1,8 +1,8 @@
-segPlot = function (rwl, nS = 33, ...) 
+segPlot = function (rwl, nS=33, ...)  #FC: os nomes das series nao aparecem quando no. series > nS 
 {
     yr <- as.numeric(rownames(rwl))
     segs <- rwl
-    noSeries <- length(segs)
+    noSeries <- length(segs)                                                       #FC
     yr.range = function(x) {
         yr.vec = as.numeric(names(x))
         mask = !is.na(x)
@@ -19,14 +19,13 @@ segPlot = function (rwl, nS = 33, ...)
     plot(yr, segs[, 1], type = "n", ylim = c(0, ncol(segs)), 
         axes = FALSE, ylab = "", xlab = "Year", ...)
     apply(segs, 2, lines, x = yr, lwd = 2)
-    if (noSeries < nS) {
-        axis(2, at = 1:ncol(segs), labels = colnames(segs), srt = 45, 
-            tick = FALSE, las = 2)
-    }
+    if (noSeries < nS){                                                            #FC
+    axis(2, at = 1:ncol(segs), labels = colnames(segs), srt = 45, 
+        tick = FALSE, las = 2)
+    }                                                                              #FC
     axis(1)
     box()
     par(op)
 }
-
 
 

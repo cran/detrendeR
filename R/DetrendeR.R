@@ -1,5 +1,6 @@
-DetrendeR <- function (...) 
+DetrendeR = function (...) 
 {
+
     pos <- match("detrenderEnv", search())
     if (is.na(pos)) 
         .optionsDefault()
@@ -20,6 +21,11 @@ DetrendeR <- function (...)
     topMenuFile <- tkmenubutton(frame0, text = "File")
     fileMenu <- tkmenu(topMenuFile, tearoff = FALSE)
     tkconfigure(topMenuFile, menu = fileMenu)
+tkadd(fileMenu, "command", label = "Read compact", command = function() {
+       try(eval(parse(text = "readCompact()")), 
+                  silent = T)
+    })
+
     tkadd(fileMenu, "command", label = "Read file", command = function() {
         readTable()
     })
@@ -30,49 +36,20 @@ DetrendeR <- function (...)
         readCrnFile()
     })
     tkadd(fileMenu, "separator")
-    tkadd(fileMenu, "command", label = "Save rwl [0.01]", command = function() {
-        if (DataBaseChoice != "<No active dataset>") {
-            fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
-                defaultextension = ".rwl", filetypes = "{RWL {.rwl}} {{All Files} {*.*}} "))
-            if (fname != "") 
-                try(eval(parse(text = paste("write.rwl(", DataBaseChoice, 
-                  ", fname=fname)"))), silent = T)
-        }
-    })
-    tkadd(fileMenu, "command", label = "Save rwl [0.001]", command = function() {
-        if (DataBaseChoice != "<No active dataset>") {
-            fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
-                defaultextension = ".rwl", filetypes = "{RWL {.rwl}} {{All Files} {*.*}} "))
-            if (fname != "") 
-                try(eval(parse(text = paste("write.rwl(", DataBaseChoice, 
-                  ", fname=fname, prec=0.001)"))), silent = T)
-        }
-    })
     tkadd(fileMenu, "command", label = "Save compact", command = function() {
         if (DataBaseChoice != "<No active dataset>") {
             fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
-                defaultextension = ".rwl", filetypes = "{RWL {.rwl}} {{All Files} {*.*}} "))
+                defaultextension = ".cpt", filetypes = " {{All Files} {*.*}} {CPT {.cpt}}"))
             if (fname != "") 
                 try(eval(parse(text = paste("dplR:::write.rwl(", 
                   DataBaseChoice, ", fname=fname, format=\"compact\")"))), 
                   silent = T)
         }
     })
-    tkadd(fileMenu, "command", label = "Save crn", command = function() {
-        if (DataBaseChoice != "<No active dataset>") {
-            .assign("fname", tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
-                defaultextension = ".crn", filetypes = "{CRN {.crn}} {{All Files} {*.*}} ")))
-            if (fname != "") {
-                try(eval(parse(text = paste("dplR:::write.crn(", 
-                  DataBaseChoice, "[,1:2], fname = fname)"))), 
-                  silent = T)
-            }
-        }
-    })
     tkadd(fileMenu, "command", label = "Save csv", command = function() {
         if (DataBaseChoice != "<No active dataset>") {
             fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
-                defaultextension = ".csv", filetypes = " {CSV {.csv}} {{All Files} {*.*}}"))
+                defaultextension = ".csv", filetypes = " {{All Files} {*.*}} {CSV {.csv}}"))
             if (fname != "") {
                 try(eval(parse(text = paste("YEAR<-row.names(", 
                   DataBaseChoice, ")"))), silent = T)
@@ -83,6 +60,41 @@ DetrendeR <- function (...)
             }
         }
     })
+	
+saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
+   tkadd(saveRwlMenu, "command", label = "[0.01]", command = function() {
+        if (DataBaseChoice != "<No active dataset>") {
+            fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
+                defaultextension = ".rwl", filetypes = " {{All Files} {*.*}} {RWL {.rwl}}"))
+            if (fname != "") 
+                try(eval(parse(text = paste("write.rwl(", DataBaseChoice, 
+                  ", fname=fname, long.names=TRUE)"))), silent = T)
+        }
+    })
+    tkadd(saveRwlMenu, "command", label = "[0.001]", command = function() {
+        if (DataBaseChoice != "<No active dataset>") {
+            fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
+                defaultextension = ".rwl", filetypes = " {{All Files} {*.*}} {RWL {.rwl}}"))
+            if (fname != "") 
+                try(eval(parse(text = paste("write.rwl(", DataBaseChoice, 
+                  ", fname=fname, prec=0.001,long.names=TRUE)"))), silent = T)
+        }
+    })
+
+	tkadd(fileMenu,"cascade",label="Save rwl",menu=saveRwlMenu)
+	
+    tkadd(fileMenu, "command", label = "Save crn", command = function() {
+        if (DataBaseChoice != "<No active dataset>") {
+            .assign("fname", tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
+                defaultextension = ".crn", filetypes = " {{All Files} {*.*}} {CRN {.crn}}")))
+            if (fname != "") {
+                try(eval(parse(text = paste("dplR:::write.crn(", 
+                  DataBaseChoice, "[,1:2], fname = fname)"))), 
+                  silent = T)
+            }
+        }
+    })
+
     tkadd(fileMenu, "separator")
     tkadd(fileMenu, "command", label = "Change dir...", command = function() {
         try(setwd(toString(tkchooseDirectory())), silent = TRUE)
@@ -168,6 +180,9 @@ DetrendeR <- function (...)
     }
     DeleteDatasetBt <- tkbutton(frame1.0, text = "  Delete  ", 
         command = DELETE_DATASET)
+
+
+
     tkgrid(DataBaseSelectedBt, DeleteDatasetBt, sticky = "w")
     tkpack(frame1.0, fill = "x")
     frame2 <- tkframe(tt, relief = "groove", borderwidth = 2)
@@ -223,8 +238,9 @@ DetrendeR <- function (...)
         }
     }
     RWL_PLOT.but <- tkbutton(frame2, text = " Rwl plot ", command = RWL_PLOT)
+    #CHRONO_PLOT.but <- tkbutton(frame2, text = " Chrono plot ", command = RWL_PLOT)
     tkgrid(Information.but, TreeIds.but, MISSING_RINGS.but, RWL_INFO.but, 
-        SEG_PLOT.but, RWL_PLOT.but)
+        SEG_PLOT.but, RWL_PLOT.but)#, CHRONO_PLOT.but)
     DETRENDING = function(TwoSteps = T, input = "", ...) {
         if (length(listDataSets()) == 0) 
             return()
@@ -276,7 +292,5 @@ DetrendeR <- function (...)
     return(invisible())
 }
 
-detrender = function()
-{
-	DetrendeR()
-}
+detrender = function(){ DetrendeR()}
+

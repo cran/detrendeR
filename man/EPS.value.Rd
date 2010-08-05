@@ -43,7 +43,7 @@ A data.frame with the following values: 'start', 'end', 'tree', 'core', 'n.tot',
 \item{r.bt }{the mean interseries correlation between all series from different trees.}
 \item{c.eff }{the effective number of cores.}
 \item{r.eff }{the effective signal calculated as [rbar.bt / (rbar.wt + (1-rbar.wt) / c.eff)].}
-\item{r.eff }{the expressed population signal.}
+\item{eps }{the expressed population signal.}
 }
 
 \references{
@@ -65,7 +65,7 @@ Cook, E.R., Kairiukstis, L.A. 1990. Methods of Dendrochronology: applications in
 }
 \examples{
 
-data(co021)
+data(co021, package="dplR")
 
 years<-as.integer(rownames(co021))
 co021.subset<-(subset(co021, subset=years>=1900 & years<=1950))

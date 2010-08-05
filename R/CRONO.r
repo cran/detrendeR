@@ -1,4 +1,4 @@
-CRONO = function (input = "", ...) 
+CRONO =function (input = "", ...) 
 {
     flag = FALSE
     if (substring(input, 1, 1) == "<") 
@@ -89,7 +89,7 @@ CRONO = function (input = "", ...)
             .assign("arMAX", as.numeric(tclvalue(arValue)))
             .assign("makeAr", as.logic(tclvalue(makeAr.value)))
             .assign("biweightMean", as.logic(tclvalue(rbValue)))
-            eval(parse(text = paste(tclvalue(tabnamevar), "<<-Chron(temp, biweight=", 
+            eval(parse(text = paste(tclvalue(tabnamevar), "<<-Chron(temp, stc=stc, biweight=", 
                 as.logic(tclvalue(rbValue)), ")", sep = "")))
         }
     }
@@ -108,4 +108,3 @@ CRONO = function (input = "", ...)
     if (tclvalue(done) == "2") 
         tkdestroy(tfCRONO)
 }
-

@@ -1,28 +1,27 @@
-readRwl = function (fname, header = NULL, n.header = NULL, info = TRUE) 
+readRwl = function (fname, header = NULL, n.header=NULL, info=TRUE) 
 {
     dat = file(fname, "r")
     if (is.null(header)) {
         hdr1 = readLines(dat, n = 1)
         if (nchar(hdr1) < 12) 
-            stop("First line in .rwl file ends before col 12")
-        yrcheck = suppressWarnings(as.numeric(substr(hdr1, 9, 
-            12)))
+stop("First line in .rwl file ends before col 12")
+        yrcheck = suppressWarnings(as.numeric(substr(hdr1, 9, 12)))		          #FC        
         if (is.null(yrcheck) | length(yrcheck) != 1 | is.na(yrcheck) | 
             yrcheck < -10000 | yrcheck > 10000) {
             cat("There appears to be a header in the rwl file\n")
             is.head = TRUE
-            if (is.null(n.header)) 
-                n.header = 1
+if (is.null(n.header)) n.header=1
         }
         else {
             is.head = FALSE
+            #cat("There does not appear to be a header in the rwl file\n")
         }
         close(dat)
         dat = file(fname, "r")
     }
     else is.head = header
     if (is.head) {
-        dat1 = readLines(dat, n = n.header + 1)[-c(1:n.header)]
+        dat1 = readLines(dat, n = n.header+1)[-c(1:n.header)]                   #FC
     }
     else dat1 = readLines(dat, n = 1)
     yrcheck = as.numeric(substr(dat1, 9, 12))
@@ -37,8 +36,7 @@ readRwl = function (fname, header = NULL, n.header = NULL, info = TRUE)
     series = dat[, 1]
     series.ids = unique(series)
     nseries = length(series.ids)
-    if (info) 
-        cat(nseries, "series\n", sep = " ")
+if (info) cat(nseries, "series\n", sep = " ")
     series.index = match(series, series.ids)
     min.year = (min(dat[, 2])%/%10) * 10
     max.year = ((max(dat[, 2]) + 10)%/%10) * 10
@@ -87,4 +85,3 @@ readRwl = function (fname, header = NULL, n.header = NULL, info = TRUE)
     rw.df = as.data.frame(rw.mat)
     rw.df
 }
-

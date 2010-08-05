@@ -1,40 +1,73 @@
-TrwLessThan=function(rwl, TRW=0){
-colnames(rwl)<-substr(paste(colnames(rwl),"       "),1,8)
- 
-TRW->value
-if (value<0)  return(cat("Tree-ring width should be >=0! "))
+TrwLessThan = function(rwl, TRW=0){
 
-if (value==0) cat("\nMISSING RINGS\n", sep="")
+value<-TRW
 
-min(as.numeric(rownames(rwl)))->first.year
-
-Missing = function(rw, value, first.year) { 
-which(rw<=value)->years
-years<-years+first.year-1
-Years=c(years , rep(NA, length(rw)))
-Years=Years[1:length(rw)]
-Years
+PrintMissingRings = function(x){
+x<-cbind(x,NA)
+n.c<-ncol(x)
+n.r<-nrow(x)
+for (r in 1:n.r){
+	cat(rownames(x)[r])
+		for (c in 1:n.c){ 
+			if(is.na(x[r,c])) break
+					cat(x[r,c])
+			if(is.na(x[r,c+1])) break
+					if (c%%10!=0) cat("\t") 
+					if (c%%10==0) cat("\n        ")
+						}
+		cat("\n")
+			}
 }
 
-t(apply(rwl, 2, Missing, value=value, first.year=first.year))->a
-if (all(is.na(a))) {
-if (value==0)   cat("There are no missing rings.\n")
-else {cat("There is no ring narrower than ", value, ".", sep="")}
-} else {
-a[,apply(a,2, sum, na.rm=T)>0]->a #->>a1
 
-length(a[!is.na(a)])->number.of.rings
-   as.data.frame(na.omit((a)))->a #->>a2
-if (number.of.rings==1 & value==0) cat("There is one missing ring.\n", sep="")
-if (number.of.rings==1 & value>0) cat("There is one ring narrower than ", value, ".\n", sep="")
-if (value==0  & number.of.rings>1) cat("There are ", number.of.rings ," missing rings.\n", sep="")
-if (number.of.rings>1 & value>0) cat("There are ", number.of.rings ," ring narrower than ", value, ".\n", sep="")
+colnames(rwl) <- substr(paste(colnames(rwl), "       "), 
+        1, 8)
 
-if (number.of.rings <50) {  
-cbind( c("Series  ", rownames(a)), rbind(NA,a)) ->A
-WriteMatrix (A, na=" ", col.names=F, row.names=F, ID=F) }
-cat("\n")
+    if (value < 0) 
+        return(cat("Tree-ring width should be >=0! "))
+    if (value == 0) 
+        cat("\nMISSING RINGS\n", sep = "")
+    first.year <- min(as.numeric(rownames(rwl)))
+    Missing = function(rw, value, first.year) {
+        years <- which(rw <= value)
+        years <- years + first.year - 1
+        Years = c(years, rep(NA, length(rw)))
+        Years = Years[1:length(rw)]
+        Years
+    }
+    a <- t(apply(rwl, 2, Missing, value = value, first.year = first.year))
+   { if (all(is.na(a))) {
+        if (value == 0) 
+            cat("There are no missing rings.\n")
+        else {
+            cat("There is no ring narrower than ", value, ".", 
+                sep = "")
+        }
+    }
+    else {
+        a <- a[ apply(a, 1, sum, na.rm = T) > 0,apply(a, 2, sum, na.rm = T) > 0]
+        number.of.rings <- length(a[!is.na(a)])
+        if (number.of.rings == 1 & value == 0) 
+            cat("There is one missing ring.\n", sep = "")
+        if (number.of.rings == 1 & value > 0) 
+            cat("There is one ring narrower than ", value, ".\n", 
+                sep = "")
+        if (value == 0 & number.of.rings > 1) 
+            cat("There are ", number.of.rings, " missing rings.\n", 
+                sep = "")
+        if (number.of.rings > 1 & value > 0) 
+            cat("There are ", number.of.rings, " ring narrower than ", 
+                value, ".\n", sep = "")
+ PrintMissingRings(a)
+        }
 }
-}
+        cat("\n")
+    }
 
-#TrwLessThan(rwl, TRW=0.1)
+#data(co021)
+#TrwLessThan(co021, TRW=0.05)
+
+
+
+
+
