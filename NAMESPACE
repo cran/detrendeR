@@ -1,4 +1,6 @@
 
+import(tcltk)
+
 export(detrender,
 	RwlInfo,
 	EPS.value)

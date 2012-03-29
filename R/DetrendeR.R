@@ -1,6 +1,7 @@
 DetrendeR = function (...) 
 {
 
+try(tkdestroy(tt), silent=TRUE)
     pos <- match("detrenderEnv", search())
     if (is.na(pos)) 
         .optionsDefault()
@@ -127,6 +128,7 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
         try(if (flag) 
             ARSTAN(), silent = TRUE)
     }
+    
     topMenuTools <- tkmenubutton(frame0, text = "Tools")
     WinTools <- tkmenu(topMenuTools, tearoff = FALSE)
     tkconfigure(topMenuTools, menu = WinTools)
@@ -134,6 +136,11 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
     tkadd(WinTools, "command", label = "Batch mode", command = function() call.detrender())
     tkpack(topMenuFile, topMenuTools, side = "left")
     tkpack(frame0, fill = "x")
+    
+    
+    
+    
+    
     frame1.0 <- tkframe(tt, relief = "groove", borderwidth = 2)
     DataDetTcl <- tclVar("<Please select a dataset>")
     .assign("DataBaseChoice", c("<No active dataset>"))
@@ -181,10 +188,13 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
     DeleteDatasetBt <- tkbutton(frame1.0, text = "  Delete  ", 
         command = DELETE_DATASET)
 
-
-
     tkgrid(DataBaseSelectedBt, DeleteDatasetBt, sticky = "w")
     tkpack(frame1.0, fill = "x")
+    
+    
+    
+    
+    
     frame2 <- tkframe(tt, relief = "groove", borderwidth = 2)
     SERIES_INFORMATION = function() {
         if (DataBaseChoice != "<No active dataset>") {
@@ -239,15 +249,36 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
     }
     RWL_PLOT.but <- tkbutton(frame2, text = " Rwl plot ", command = RWL_PLOT)
     #CHRONO_PLOT.but <- tkbutton(frame2, text = " Chrono plot ", command = RWL_PLOT)
-    tkgrid(Information.but, TreeIds.but, MISSING_RINGS.but, RWL_INFO.but, 
-        SEG_PLOT.but, RWL_PLOT.but)#, CHRONO_PLOT.but)
-    DETRENDING = function(TwoSteps = T, input = "", ...) {
+   
+    tkgrid(Information.but, TreeIds.but, MISSING_RINGS.but, RWL_INFO.but, SEG_PLOT.but, RWL_PLOT.but)#, CHRONO_PLOT.but)
+    tkpack(frame2, fill = "x")   
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+   
+    
+  
+    
+    frame3 <- tkframe(tt, relief = "groove", borderwidth = 2)
+    frame3.1 <- tkframe(frame3, relief = "groove", borderwidth = 1)
+    frame3.2 <- tkframe(frame3, relief = "groove", borderwidth = 0)
+    
+     DETRENDING = function(TwoSteps = T, input = "", ...) {
         if (length(listDataSets()) == 0) 
             return()
         detrending(TwoSteps = TwoSteps, input = input)
     }
-    frame3 <- tkframe(tt, relief = "groove", borderwidth = 2)
-    topMenuDetrending <- tkmenubutton(frame3, text = "Detrending  ")
+        
+    topMenuDetrending <- tkmenubutton(frame3.1, text = "Detrending  ")
     detrendingMenu <- tkmenu(topMenuDetrending, tearoff = FALSE)
     tkconfigure(topMenuDetrending, menu = detrendingMenu)
     tkadd(detrendingMenu, "command", label = "1 step", command = function(...) {
@@ -261,24 +292,36 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
             return()
         arMODEL(input = DataBaseChoice)
     }
-    AR.but <- tkbutton(frame3, text = "  AR model ", command = AR.MODEL)
+    
+    
+    
+    AR.but <- tkbutton(frame3.2, text = "  AR model ", command = AR.MODEL)
     makeCRONO = function() {
         if (length(listDataSets()) == 0) 
             return()
         CRONO(input = DataBaseChoice)
         tkfocus(tt)
     }
-    CRONObut <- tkbutton(frame3, text = "     Chrono     ", command = makeCRONO)
+    CRONObut <- tkbutton(frame3.2, text = "     Chrono     ", command = makeCRONO)
     EPS = function(...) {
         if (length(listDataSets()) == 0) 
             return()
         interactiveEPS(input = DataBaseChoice)
     }
-    EPSbut <- tkbutton(frame3, text = "     EPS     ", command = EPS)
-    tkgrid(EPSbut)
-    tkpack(topMenuDetrending, AR.but, CRONObut, EPSbut, fill = "x", 
-        side = "left")
-    tkpack(frame2, fill = "x")
+    EPSbut <- tkbutton(frame3.2, text = "     EPS     ", command = EPS)
+#    tkgrid(EPSbut)
+#   tkpack(topMenuDetrending, AR.but, CRONObut, EPSbut, side = "left")
+tkpack(topMenuDetrending)
+tkpack(frame3.1,side="left")
+
+#######tkgrid( AR.but, CRONObut, EPSbut)
+tkpack( AR.but, CRONObut, EPSbut, side="left")
+tkpack(frame3.2,side="left")
+
+#   tkgrid(topMenuDetrending)
+#tkgrid( AR.but, CRONObut, EPSbut)
+    #, fill = "x", side = "left")
+#    tkpack(frame2, fill = "x")
     tkpack(frame3, fill = "x")
     tkfocus(tt)
     tkwm.resizable(tt, 1, 0)

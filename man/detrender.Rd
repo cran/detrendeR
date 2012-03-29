@@ -48,13 +48,7 @@ The last button, "EPS", produces several statistics that indicate the common sig
  
 There are two ways to end the detrendeR session. The user can select File -> Quit detrendeR and will be asked whether the R workspace should be saved. The R session will be kept working and the detrendeR can be started later by writing the command detrender() in the R console editor. The user can also select File -> Quit R and, in this case, the program will ask whether to save the R workspace (i.e., the data that R keeps in memory). This allows the user to maintain different saved workspaces for different projects.
 }
-\value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
-}
+
 \references{
 Bunn, A. 2008. A dendrochronology program library in R (dplR). Dendrochronologia 26:115-124.
 
@@ -66,22 +60,8 @@ Fox, J. 2005. The R Commander: A basic-statistics graphical user interface to R.
 
 Thioulouse, J., Dray, S. 2009. ade4TkGUI: ade4 Tcl/Tk Graphical User Interface. R package version 0.25. http://CRAN.R-project.org/package=ade4TkGUI.
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 detrender()
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+

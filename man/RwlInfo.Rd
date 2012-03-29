@@ -17,9 +17,9 @@ RwlInfo(rwl, print=TRUE, chrono=NULL)
   \item{chrono }{If NULL the function computes a mean chronology using all series presented in the data.frame (rwl).}
 }
 %- maybe also 'usage' for other objects documented here.
-\details{
+%%\details{
 %%  ~~ If necessary, more details than the description above ~~
-}
+%%}
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -31,19 +31,20 @@ A data.frame with the descriptive statistics for each series.
 }
 \references{
 %% ~put references to the literature/web site here ~
+Bunn, A. 2008. A dendrochronology program library in R (dplR). Dendrochronologia 26:115-124.
 }
-\author{
+%%\author{
 %%  ~~who you are~~
-}
-\note{
+%%}
+%%\note{
 %%  ~~further notes~~
-}
+%%}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
+%%\seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+%%}
 \examples{
 
 data(co021, package="dplR")

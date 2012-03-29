@@ -67,8 +67,8 @@ cat("\n")
 TrwLessThan(detrend1, TRW=0.01) }
 
 rw1=rwl/detrend1
-write.rwl(detrend1, fname= paste(file.name, "cv1", sep="."))
-write.rwl(rw1, fname= paste(file.name, "in1", sep="."))
+write.rwl(detrend1, fname= paste(file.name, "cv1", sep="."),long.names=TRUE)
+write.rwl(rw1, fname= paste(file.name, "in1", sep="."),long.names=TRUE)
 
 #if (save.detrend1) saveDetrendJPG (rwl, detrend1, folderName = "FirstDetrend", detrend.method=first.detrending.method)
 RwlInfo(rw1, print=TRUE)
@@ -93,8 +93,8 @@ if(min(detrend2, na.rm=TRUE)<0) {cat("\n")
 rw2=rw1/detrend2
 
         #if (save.detrend2)  saveDetrendJPG (rw1, detrend2, folderName = "SecondDetrend", detrend.method=second.detrending.method)
-            write.rwl(detrend2, fname= paste(file.name, "cv2", sep="."))
-            write.rwl(rw2, fname= paste(file.name, "in2", sep="."))
+            write.rwl(detrend2, fname= paste(file.name, "cv2", sep="."),long.names=TRUE)
+            write.rwl(rw2, fname= paste(file.name, "in2", sep="."),long.names=TRUE)
             RwlInfo(rw2, print=TRUE) }
         else {
              rw2<-rw1 }
@@ -123,7 +123,7 @@ if (makeAr){
             PrintPlotChrono(crnRes, rwl=res, file.name = file.name, crono.type="RES" )
             cat("\nResidual series\n")
             RwlInfo(res, print=TRUE)
-            write.rwl(res, fname= paste(file.name, "res", sep="."))
+            write.rwl(res, fname= paste(file.name, "res", sep="."),long.names=TRUE)
   if (run.win.analysis){cat("\nRunning analysis of residual series\n\n")
             runWinRes<-Run.Win(res, winLength=winLength, stc=stc, step = stepWin)
             for (i in c(0.75, 0.80, 0.85, 0.90)) {EPS.resume(runWinRes, EPS=i)}}

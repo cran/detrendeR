@@ -12,7 +12,7 @@ This packages contains a Graphical User Interface to perform some standard tree-
 \tabular{ll}{
 Package: \tab detrendeR\cr
 Type: \tab Package\cr
-Version: \tab 1.0.1\cr
+Version: \tab 1.0.2\cr
 License: \tab GPL\cr
 }
 }
@@ -33,9 +33,7 @@ Thioulouse, J., Dray, S. 2009. ade4TkGUI: ade4 Tcl/Tk Graphical User Interface. 
 }
 
 \keyword{ package }
-\seealso{
 
-}
 \examples{
 detrender()
 }

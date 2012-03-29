@@ -17,9 +17,7 @@ EPS.value(rwl, stc = c(5,2,1))
   \item{stc }{a vector of three integers giving the Site-Tree-Core mask. Defaults to c(5,2,1) and these three values should sum to eigth. The stc[1] gives the number of characters used to define the site code, stc[2] defines the tree mask and the core ids is given by the last element of the vector stc[3]. 
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 
 \value{
 %%  ~Describe the value returned
@@ -51,18 +49,18 @@ Bunn, A. 2008. A dendrochronology program library in R (dplR). Dendrochronologia
 
 Cook, E.R., Kairiukstis, L.A. 1990. Methods of Dendrochronology: applications in the environmental sciences.  Kluwer Academic Publishers.
 }
-\author{
+%%\author{
 %%  ~~who you are~~
-}
-\note{
+%%}
+%%\note{
 %%  ~~further notes~~
-}
+%%}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
+%%\seealso{
 %% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+%%}
 \examples{
 
 data(co021, package="dplR")
