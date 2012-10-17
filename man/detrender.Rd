@@ -5,15 +5,19 @@
 R detrendeR
 }
 \description{
-Start the detrendeR GUI (Graphical User Interface)
+Start a Graphical User Interface to perform tree-ring analyses.
 }
 \usage{
+%detrender(...)
 detrender()
 }
 %- maybe also 'usage' for other objects documented here.
+%\arguments{
+%  \item{...  }{Additional arguments.  }
+%}
 \details{
 %%  ~~ If necessary, more details than the description above ~~
-This functions starts detrendeR Graphical User Interface (GUI). The window of the detrendeR GUI contains the menu bar, and three toolbars below, each comprising several buttons. The three toolbars, from up to down, are aimed at: i) managing the data set of tree-ring series to be processed; ii) provide general information about the active data set; iii) apply the statistical functions related to detrending and chronology building. The order of the different bars corresponds to the consecutive steps the user should follow to build a chronology.
+This function starts a Graphical User Interface (GUI). The window of the detrendeR GUI contains the menu bar, and three toolbars below, each comprising several buttons. The three toolbars, from up to down, are aimed at: i) managing the data set of tree-ring series to be processed; ii) provide general information about the active data set; iii) apply the statistical functions related to detrending and chronology building. The order of the different bars corresponds to the consecutive steps the user should follow to build a chronology.
 
 The File menu provides functions to read and save files, to exit detrendeR and to Quit R:
 "Read file" allows to read a data file and store the information in a new dataset. The option "clipboard" can be used to read a data table just copied from a spreadsheet program (like Excel).

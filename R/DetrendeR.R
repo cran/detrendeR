@@ -1,10 +1,25 @@
-DetrendeR = function (...) 
-{
+detrender = function () DetrendeR()
 
-try(tkdestroy(tt), silent=TRUE)
-    pos <- match("detrenderEnv", search())
+
+
+DetrendeR = function () {
+
+
+
+
+
+
+	detrendeRversion <- "detrendeR 1.0.3"
+    try(tkdestroy(.detrendeRGUI), silent = TRUE)
+	pos <- match("detrenderEnv", search())
+	if (!is.na(pos)){
+	if (exists (".detrendeRGUI", envir=as.environment(pos))) try(rm(.detrendeRGUI, pos=pos), silent = TRUE)
+    }
     if (is.na(pos)) 
+
+
         .optionsDefault()
+
     listDataSets = function(envir = .GlobalEnv, ...) {
         Vars <- ls(envir = envir, all.names = TRUE)
         if (length(Vars) == 0) 
@@ -13,20 +28,31 @@ try(tkdestroy(tt), silent=TRUE)
             envir = envir)) || is.matrix(get(.x, envir = envir)))))
         out
     }
+    
+
+    
+    
+   # .assign(".RemoveTrend", .RemoveTrend)
+   # .assign(".as.logic", .as.logic)
+   # .assign(".SPLINE", .SPLINE)
+   # .assign(".NegExp", .NegExp)
+   # .assign(".SPLINE", .SPLINE)
+   # .assign(".GetDetrendMethod", .GetDetrendMethod)
+
+    
     .assign("fname", "")
     .assign("TempDataBase", "")
-    tt <- tktoplevel()
-    tkwm.title(tt, "detrendeR")
-    tkwm.geometry(tt, "+0+0")
-    frame0 <- tkframe(tt, relief = "groove", borderwidth = 2)
+	.assign(".detrendeRGUI",.detrendeRGUI <- tktoplevel())
+#tkwm.resizable(.detrendeRGUI, 1, 0)
+    tkwm.title(.detrendeRGUI, detrendeRversion)
+    tkwm.geometry(.detrendeRGUI, "+0+0")
+    frame0 <- tkframe(.detrendeRGUI, relief = "groove", borderwidth = 2)
     topMenuFile <- tkmenubutton(frame0, text = "File")
     fileMenu <- tkmenu(topMenuFile, tearoff = FALSE)
     tkconfigure(topMenuFile, menu = fileMenu)
-tkadd(fileMenu, "command", label = "Read compact", command = function() {
-       try(eval(parse(text = "readCompact()")), 
-                  silent = T)
+    tkadd(fileMenu, "command", label = "Read compact", command = function() {
+        try(eval(parse(text = "readCompact()")), silent = T)
     })
-
     tkadd(fileMenu, "command", label = "Read file", command = function() {
         readTable()
     })
@@ -61,9 +87,8 @@ tkadd(fileMenu, "command", label = "Read compact", command = function() {
             }
         }
     })
-	
-saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
-   tkadd(saveRwlMenu, "command", label = "[0.01]", command = function() {
+    saveRwlMenu <- tkmenu(fileMenu, tearoff = FALSE)
+    tkadd(saveRwlMenu, "command", label = "[0.01]", command = function() {
         if (DataBaseChoice != "<No active dataset>") {
             fname = tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
                 defaultextension = ".rwl", filetypes = " {{All Files} {*.*}} {RWL {.rwl}}"))
@@ -78,12 +103,11 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
                 defaultextension = ".rwl", filetypes = " {{All Files} {*.*}} {RWL {.rwl}}"))
             if (fname != "") 
                 try(eval(parse(text = paste("write.rwl(", DataBaseChoice, 
-                  ", fname=fname, prec=0.001,long.names=TRUE)"))), silent = T)
+                  ", fname=fname, prec=0.001,long.names=TRUE)"))), 
+                  silent = T)
         }
     })
-
-	tkadd(fileMenu,"cascade",label="Save rwl",menu=saveRwlMenu)
-	
+    tkadd(fileMenu, "cascade", label = "Save rwl", menu = saveRwlMenu)
     tkadd(fileMenu, "command", label = "Save crn", command = function() {
         if (DataBaseChoice != "<No active dataset>") {
             .assign("fname", tclvalue(tkgetSaveFile(initialfile = DataBaseChoice, 
@@ -95,7 +119,6 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
             }
         }
     })
-
     tkadd(fileMenu, "separator")
     tkadd(fileMenu, "command", label = "Change dir...", command = function() {
         try(setwd(toString(tkchooseDirectory())), silent = TRUE)
@@ -121,14 +144,13 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
             return(invisible(q(save = "no")))
     }
     tkadd(fileMenu, "separator")
-    tkadd(fileMenu, "command", label = "Quit DetrendeR", command = function() tkdestroy(tt))
+    tkadd(fileMenu, "command", label = "Quit DetrendeR", command = function() tkdestroy(.detrendeRGUI))
     tkadd(fileMenu, "command", label = "Quit R", command = function() exitR())
     call.detrender = function() {
         flag <- detrenderGUI()
         try(if (flag) 
             ARSTAN(), silent = TRUE)
     }
-    
     topMenuTools <- tkmenubutton(frame0, text = "Tools")
     WinTools <- tkmenu(topMenuTools, tearoff = FALSE)
     tkconfigure(topMenuTools, menu = WinTools)
@@ -136,12 +158,7 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
     tkadd(WinTools, "command", label = "Batch mode", command = function() call.detrender())
     tkpack(topMenuFile, topMenuTools, side = "left")
     tkpack(frame0, fill = "x")
-    
-    
-    
-    
-    
-    frame1.0 <- tkframe(tt, relief = "groove", borderwidth = 2)
+    frame1.0 <- tkframe(.detrendeRGUI, relief = "groove", borderwidth = 2)
     DataDetTcl <- tclVar("<Please select a dataset>")
     .assign("DataBaseChoice", c("<No active dataset>"))
     foo <- function() {
@@ -150,7 +167,7 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
             .assign("DataBaseChoice", c("<No active dataset>"))
             tkconfigure(DataBaseSelectedBt, textvariable = tclVar(DataBaseChoice), 
                 bg = "red", foreground = "black")
-            tkfocus(tt)
+            tkfocus(.detrendeRGUI)
             return()
         }
         .assign("DataBaseChoice", tk_select.list(sort(listDataSets()), 
@@ -182,20 +199,14 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
                     bg = "red", foreground = "black")
                 }
             }
-            tkfocus(tt)
+            tkfocus(.detrendeRGUI)
         }
     }
     DeleteDatasetBt <- tkbutton(frame1.0, text = "  Delete  ", 
         command = DELETE_DATASET)
-
     tkgrid(DataBaseSelectedBt, DeleteDatasetBt, sticky = "w")
     tkpack(frame1.0, fill = "x")
-    
-    
-    
-    
-    
-    frame2 <- tkframe(tt, relief = "groove", borderwidth = 2)
+    frame2 <- tkframe(.detrendeRGUI, relief = "groove", borderwidth = 2)
     SERIES_INFORMATION = function() {
         if (DataBaseChoice != "<No active dataset>") {
             cat("\n[", DataBaseChoice, "]\n", sep = "")
@@ -248,36 +259,17 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
         }
     }
     RWL_PLOT.but <- tkbutton(frame2, text = " Rwl plot ", command = RWL_PLOT)
-    #CHRONO_PLOT.but <- tkbutton(frame2, text = " Chrono plot ", command = RWL_PLOT)
-   
-    tkgrid(Information.but, TreeIds.but, MISSING_RINGS.but, RWL_INFO.but, SEG_PLOT.but, RWL_PLOT.but)#, CHRONO_PLOT.but)
-    tkpack(frame2, fill = "x")   
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-   
-    
-  
-    
-    frame3 <- tkframe(tt, relief = "groove", borderwidth = 2)
+    tkgrid(Information.but, TreeIds.but, MISSING_RINGS.but, RWL_INFO.but, 
+        SEG_PLOT.but, RWL_PLOT.but)
+    tkpack(frame2, fill = "x")
+    frame3 <- tkframe(.detrendeRGUI, relief = "groove", borderwidth = 2)
     frame3.1 <- tkframe(frame3, relief = "groove", borderwidth = 1)
     frame3.2 <- tkframe(frame3, relief = "groove", borderwidth = 0)
-    
-     DETRENDING = function(TwoSteps = T, input = "", ...) {
+    DETRENDING = function(TwoSteps = T, input = "", ...) {
         if (length(listDataSets()) == 0) 
             return()
         detrending(TwoSteps = TwoSteps, input = input)
     }
-        
     topMenuDetrending <- tkmenubutton(frame3.1, text = "Detrending  ")
     detrendingMenu <- tkmenu(topMenuDetrending, tearoff = FALSE)
     tkconfigure(topMenuDetrending, menu = detrendingMenu)
@@ -292,48 +284,34 @@ saveRwlMenu <- tkmenu(fileMenu,tearoff=FALSE)
             return()
         arMODEL(input = DataBaseChoice)
     }
-    
-    
-    
     AR.but <- tkbutton(frame3.2, text = "  AR model ", command = AR.MODEL)
     makeCRONO = function() {
         if (length(listDataSets()) == 0) 
             return()
         CRONO(input = DataBaseChoice)
-        tkfocus(tt)
+        tkfocus(.detrendeRGUI)
     }
-    CRONObut <- tkbutton(frame3.2, text = "     Chrono     ", command = makeCRONO)
+    CRONObut <- tkbutton(frame3.2, text = "     Chrono     ", 
+        command = makeCRONO)
     EPS = function(...) {
         if (length(listDataSets()) == 0) 
             return()
         interactiveEPS(input = DataBaseChoice)
     }
     EPSbut <- tkbutton(frame3.2, text = "     EPS     ", command = EPS)
-#    tkgrid(EPSbut)
-#   tkpack(topMenuDetrending, AR.but, CRONObut, EPSbut, side = "left")
-tkpack(topMenuDetrending)
-tkpack(frame3.1,side="left")
-
-#######tkgrid( AR.but, CRONObut, EPSbut)
-tkpack( AR.but, CRONObut, EPSbut, side="left")
-tkpack(frame3.2,side="left")
-
-#   tkgrid(topMenuDetrending)
-#tkgrid( AR.but, CRONObut, EPSbut)
-    #, fill = "x", side = "left")
-#    tkpack(frame2, fill = "x")
+    tkpack(topMenuDetrending)
+    tkpack(frame3.1, side = "left")
+    tkpack(AR.but, CRONObut, EPSbut, side = "left")
+    tkpack(frame3.2, side = "left")
     tkpack(frame3, fill = "x")
-    tkfocus(tt)
-    tkwm.resizable(tt, 1, 0)
-    Sys.sleep(0.015)
-    .Geometry <- toString(tkwm.geometry(tt))
-    .geometry <- strsplit(toString(tkwm.geometry(tt)), "+")[[1]]
-    .n <- which(.geometry == "x")
-    .assign(".width", as.integer(strtrim(.Geometry, .n - 1)))
-    .assign(".heigth", as.integer(substr(.Geometry, .n + 1, which(.geometry == 
-        "+")[1] - 1)) + 26)
+    tkfocus(.detrendeRGUI)
+    tkwm.resizable(.detrendeRGUI, 0, 0)
+    #Sys.sleep(0.015)
+    #.Geometry <- toString(tkwm.geometry(.detrendeRGUI))
+    #.geometry <- strsplit(toString(tkwm.geometry(.detrendeRGUI)), "+")[[1]]
+    #.n <- which(.geometry == "x")
+    .assign(".width", 0)#as.integer(strtrim(.Geometry, .n - 1)))
+    .assign(".heigth", 0)#as.integer(substr(.Geometry, .n + 1, which(.geometry == "+")[1] - 1)) + 26)
     return(invisible())
 }
-
-detrender = function(){ DetrendeR()}
 

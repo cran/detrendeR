@@ -1,10 +1,11 @@
-db0d62521cb5fe2fa482b73b95a539cf *DESCRIPTION
+c256090b6d0a6bc82544fde33a10b8a4 *DESCRIPTION
 dc76b90c948197cd2cb4017bc6582544 *NAMESPACE
 fb8fc39202ba10bb9ba1ed3e18bb0716 *R/ArFunction.r
 1e729bda270414e3053f69db6644e1c1 *R/CRONO.r
 d03c03185130cb3bf5a76d2f491f5aca *R/Chron.r
+003cf170041233c0ca82b8e1263d8a19 *R/CodeR.r
 ce96dc96535b6200cfc576b10a4e4162 *R/DeleteSeriesShorterThan.r
-57c74de6d75c95db9b04478182ae98ac *R/DetrendeR.R
+1a48dd862d321b2ce494d21060606611 *R/DetrendeR.R
 915c114842040934dd5c47678373865d *R/Detrender.Options.r
 833444961a1e6b411c073663eef3d0b9 *R/EPS.common.interval.r
 0489e8917a125e43b060e5d98ab981a8 *R/EPS.resume.r
@@ -23,13 +24,13 @@ d5ae99c7293d19cf239faa8c312f90a1 *R/Run.Win.r
 9fa858efeed6a5bd1bfdf59fee506892 *R/SampleDepth.r
 e748cd20316150231e65f274e0b4b60c *R/Spline.r
 0e0f65603b748a2df1afb213290da6f0 *R/TreeIds.r
-cc0aacf59c1f09c7d5fc657f62676762 *R/TrwLessThan.r
+7236de98235cbb3c7e64d29060b7bf38 *R/TrwLessThan.r
 ee1aa1b709ebc9e7a86cabd7418975a9 *R/WriteMatrix.r
 13271c53ad5397c9c5fba9efb7399617 *R/arMODEL.r
 cd12464541fa12a16e243b2b0c4d2307 *R/arstan.R
 4a5c28cadfbe7d6a4941312df6df38bd *R/as.logic.r
 33117f4ebeeb4f7fe5be4ede38dbc28a *R/commonInterval.r
-7ba587ca5f221b7ec152e074a0df8c5e *R/detrendeR-internal.R
+dbe214e511d9376758b16e977f851f47 *R/detrendeR-internal.R
 5b81b28c7244e18c9e4148d89b1de434 *R/detrenderEnv.R
 fd1d1b0c1e8e1f12b84c26fa65ca05e2 *R/detrenderGUI.r
 9a2123b9f17876bb1ed6e506d00df172 *R/detrending.r
@@ -37,7 +38,7 @@ fd1d1b0c1e8e1f12b84c26fa65ca05e2 *R/detrenderGUI.r
 b4c0cdf8f45b6b153074e355dacb999e *R/getFileName.r
 54742bf07128919cb5454a244f9b0863 *R/interactiveDETRENDING.r
 05f70fa2d04a4569afd18ac25cfa0f48 *R/interactiveEPS.r
-e6f47594734271b8c7a7175da55ab2b9 *R/interactivedetrending_1.R
+33b5c3bd46068423c97b2dc2f0e67694 *R/interactivedetrending_1.R
 35de95313137dc12fb36af770483df66 *R/plotRwl.r
 f35da46444184d0a0357ea6dc55fd7c6 *R/readCompact.r
 f5ff8485a59fdda3e3178f566569186e *R/readCrn.r
@@ -53,5 +54,5 @@ ed465e63b8d66bb556b5f56aa9d75f8a *R/seriesInfo.r
 072aaca52dda2afcbc8a49c1c4dbf872 *R/toNumber.r
 cb4e0d5f5712a43009b630193d928080 *man/EPS.value.Rd
 36b0c1939e6bfba938ccbd0009a9f555 *man/RwlInfo.Rd
-8f3cd945dc35c502a5baf3a36a36f9ab *man/detrendeR-package.Rd
-d85c247ddee52da29aef481f0242962b *man/detrender.Rd
+e5c7b28ec6020b3457ee31a3f4e0d590 *man/detrendeR-package.Rd
+c1d106a85241b22b94f69bc020d32c97 *man/detrender.Rd

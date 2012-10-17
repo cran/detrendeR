@@ -14,15 +14,112 @@ ar.func <- function(y, order.max = 10)
 
 }
 
-.assign <-
-function(x, value){
+
+
+.as.logic = function (x) 
+{
+    return(as.logical(as.integer(x)))
+}
+.RemoveTrend = function (rw, method = c("Spline", "Spline%", "ModNegExp", "Mean"), 
+    BandwidthPerc = 2/3, Bandwidth = 32, P = 1/2) 
+{
+    BandwidthPerc = as.numeric(BandwidthPerc)
+    if (method == "Spline") {
+        curve <- .SPLINE(rw, bandwidth = Bandwidth, p = P)
+        return(curve)
+    }
+    if (method == "Spline%") {
+        curve <- .SPLINE(rw, bandwidth = length(rw) * BandwidthPerc, 
+            p = P)
+        return(curve)
+    }
+    if (method == "ModNegExp") {
+        curve <- .NegExp(rw)
+        return(curve)
+    }
+    if (method == "Mean") {
+        series <- rw[!is.na(rw)]
+        curve <- rep(mean(series), length(series))
+        rw[!is.na(rw)] = curve
+        return(rw)
+    }
+}
+
+.SPLINE = function (rw, bandwidth = 32, p = 0.5) 
+{
+    p = as.numeric(p)
+    series <- rw[!is.na(rw)]
+    curve <- suppressWarnings(ffcsaps(series, nyrs = bandwidth, 
+        f = p))
+    rw[!is.na(rw)] <- curve
+    return(rw)
+}
+
+.NegExp = function (Y, pos.slope = FALSE) 
+{
+    y <- Y[!is.na(Y)]
+    y <- replace(y, y == 0, 0.001)
+    fit.linear.model = FALSE
+    x = 1:length(y)
+    a = mean(y[1:floor(length(y) * 0.05)])
+    b = -0.01
+    k = mean(y[floor(length(y) * 0.95):length(y)])
+    fits <- try(nls(y ~ Const + A * exp(B * x), start = list(A = a, 
+        B = b, Const = k), trace = F), silent = T)
+    if (class(fits) == "try-error") {
+        fit.linear.model = TRUE
+    }
+    else fits = predict(fits)
+    if (fits[1] < fits[length(fits)]) 
+        fit.linear.model = TRUE
+    if (fits[length(fits)] < 0) 
+        fit.linear.model = TRUE
+    if (fit.linear.model) {
+        linear.model = lm(y ~ x)
+        fits = predict(linear.model)
+        if (coef(linear.model)[2] > 0 & !pos.slope) 
+            fits = rep(mean(y), length(x))
+    }
+    Y[!is.na(Y)] <- fits
+    return(Y)
+}
+
+.GetDetrendMethod = function (method, n, nPerc, p) 
+{
+    Method = "No detrending"
+    if (method == "Mean") {
+        Method = "Mean"
+    }
+    if (method == "ModNegExp") {
+        Method = "Exponential"
+    }
+    if (method == "Spline") {
+        Method = paste("Spline n=", n, ", p=", p, sep = "")
+    }
+    if (method == "Spline%") {
+        Method = paste("Spline n%=", nPerc, ", p=", p, sep = "")
+    }
+    if (method == "No Detrending") {
+        Method = paste("No detrending", sep = "")
+    }
+    return(Method)
+}
+
+
+
+
+
+
+
+
+.assign <- function(x, value){
 
       assign(x, value, envir = detrenderEnv())
 
       }
 
-.get <-
-function(x){
+
+.get <- function(x){
 
       get(x, envir = detrenderEnv())
 
@@ -112,8 +209,13 @@ function ()
 
 #Save graph 
 .assign("saveCronoJpg", TRUE)
+
+#window position
+.assign(".heigth", 0)
+.assign(".width", 0)
+
 }
 
-detrender()
+
 
 

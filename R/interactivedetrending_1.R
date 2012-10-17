@@ -106,7 +106,7 @@ rwl.draw.change = function(...){
       temp = rwl[,seriesIndex]
          cv<-try(RemoveTrend (temp, method = currentMETHOD, BandwidthPerc=currentBANDWIDTH.P, Bandwidth=currentBANDWIDTH, P=currentP) , silent=TRUE)
         DETRENDING_INTERACTIVE_OUTPUT_CHANGE[seriesIndex,3] <<- GetDetrendMethod(method=currentMETHOD,  n=currentBANDWIDTH, nPerc=currentBANDWIDTH.P, p=currentP)
-      DETRENDING_INTERACTIVE_OUTPUT[,seriesIndex]<-cv
+      DETRENDING_INTERACTIVE_OUTPUT[,seriesIndex]<<-cv
            .assign("DETRENDING_INTERACTIVE_OUTPUT", DETRENDING_INTERACTIVE_OUTPUT)
        
          re.draw()
@@ -180,20 +180,20 @@ RadioButton(frame2.2, variable=METHOD.value, BUTTON = detrend.types, VALUE = det
 ################################################################################
 #tkpack(tklabel(frame2.3, text ="Bandwidth", foreground = "blue"))
 #tkpack(tkscale(frame2.3, label="Bandwidth (years)", command=re.draw, from=10, to=1000, variable="BANDWIDTH.value", showvalue=TRUE, resolution=5, orient="hor"), fill="x")
-bandwidth.scale <- tkscale(frame2.3, label="Bandwidth (years)", from=n, to=n, variable="BANDWIDTH.value", showvalue=TRUE, resolution=5, orient="hor", command=re.draw)
+bandwidth.scale <- tkscale(frame2.3, label="Bandwidth (years)", from=n, to=n, variable="BANDWIDTH.value", showvalue=TRUE, resolution=5, orient="hor")#, command=re.draw)
 
 tkpack(bandwidth.scale, fill="x")
 #tkbind(bandwidth.scale, "<ButtonRelease-1>",function (...) re.draw())
 
 #tkpack(tklabel(frame2.3, text =   "Bandwidth percentage", foreground = "blue"))
 #tkpack(tkscale(frame2.3, label="Bandwidth (ratio)", command=re.draw, from=0.05, to=2.00, variable="BANDWIDTH.P.value", showvalue=TRUE, resolution=0.05, orient="hor"), fill="x")
-bandwidth.p.scale <- tkscale(frame2.3, label="Bandwidth (ratio)",  from=nPerc, to=nPerc, variable="BANDWIDTH.P.value", showvalue=TRUE, resolution=0.05, orient="hor", command=re.draw)
+bandwidth.p.scale <- tkscale(frame2.3, label="Bandwidth (ratio)",  from=nPerc, to=nPerc, variable="BANDWIDTH.P.value", showvalue=TRUE, resolution=0.05, orient="hor")#, command=re.draw)
 tkpack(bandwidth.p.scale, fill="x")
 #tkbind(bandwidth.p.scale, "<ButtonRelease-1>"=function(...) { re.draw() })
 
 #tkpack(tklabel(frame2.3, text = "P", foreground = "blue"), side="left")
 #tkpack(tkscale(frame2.3,label =   "P", command=re.draw, from=0, to=1.00, variable="P.value", showvalue=TRUE, resolution=0.1, orient="hor"), fill="x")
-p.scale <- tkscale(frame2.3, label="P",  from=p, to=p, variable="P.value", showvalue=TRUE, resolution=0.05, orient="hor", command=re.draw)
+p.scale <- tkscale(frame2.3, label="P",  from=p, to=p, variable="P.value", showvalue=TRUE, resolution=0.05, orient="hor")#, command=re.draw)
 tkpack(p.scale, fill="x")
 #tkbind(p.scale, "<ButtonRelease-1>" =function(...) { re.draw() })
 
@@ -249,6 +249,24 @@ tkpack(tt, fill="x")
 tkconfigure(bandwidth.scale, from=5, to=1000)
 tkconfigure(bandwidth.p.scale, from=0.05, to=2)
 tkconfigure(p.scale, from=0.0, to=1)
+
+#bandwidth.p.scale
+      tkbind(bandwidth.p.scale, "<ButtonRelease-1>", function(...) re.draw())
+     tkbind(bandwidth.p.scale, "<ButtonRelease-2>", function(...) re.draw())
+     tkbind(bandwidth.p.scale, "<Left>", function(...) re.draw())
+     tkbind(bandwidth.p.scale, "<Right>", function(...) re.draw()) 
+     tkbind(bandwidth.scale, "<ButtonRelease-1>", function(...) re.draw())
+     tkbind(bandwidth.scale, "<ButtonRelease-2>", function(...) re.draw())
+     tkbind(bandwidth.scale, "<Left>", function(...) re.draw())
+     tkbind(bandwidth.scale, "<Right>", function(...) re.draw())
+     tkbind(p.scale, "<ButtonRelease-1>", function(...) re.draw())
+     tkbind(p.scale, "<ButtonRelease-2>", function(...) re.draw())
+     tkbind(p.scale, "<Left>", function(...) re.draw())
+     tkbind(p.scale, "<Right>", function(...) re.draw())
+    draw()
+   #  
+
+
 
 tkbind(ttt, "<Destroy>", function() tclvalue(done) <- 2)
     #tkbind(ttt, "<KeyPress-Return>", function() OnOk())
