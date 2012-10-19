@@ -4,12 +4,7 @@ detrender = function () DetrendeR()
 
 DetrendeR = function () {
 
-
-
-
-
-
-	detrendeRversion <- "detrendeR 1.0.3"
+	detrendeRversion <- "detrendeR 1.0.4"
     try(tkdestroy(.detrendeRGUI), silent = TRUE)
 	pos <- match("detrenderEnv", search())
 	if (!is.na(pos)){

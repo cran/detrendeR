@@ -25,7 +25,7 @@ Detrender.Options(Stc=stc)
 sink()
 sink(output, append=TRUE)
 
-cat("Input: ", a, "\nOutput: ", Output, outputFolder, "\\", output, "\n",sep ="")
+cat("Input: ", a, "\nOutput: ", Output, outputFolder, "/", output, "\n",sep ="")
 
 #rwl<-readRwl(a,n.header=n.lines.header, info=FALSE)      #read the file [i]
 rwl<-readRwl(a,n.header=NULL, info=FALSE)      #read the file [i]
@@ -52,54 +52,139 @@ dev.off()
 #  DETRENDING  #################################################################
 ################################################################################
 if (makeFirstDetrending) {
-cat("\nDETRENDING\n\nFirst detrending [",first.detrending.method, "]\n", sep="")
 
-detrend1= apply(rwl, 2, RemoveTrend, method=method1, BandwidthPerc=nPerc1, Bandwidth = n1, P=p1)
-if (save.detrend1) saveDetrendJPG (rwl, detrend1, folderName = "FirstDetrend", detrend.method=first.detrending.method)########
 
-if (interactive.detrend) {InteractiveDetrending (rwl, detrend1, folderName = "FirstDetrend", method=method1,  n=n1, nPerc=nPerc1, p=p1)
-if (.get("DETRENDING_INTERACTIVE_FLAG")) {detrend1=.get("DETRENDING_INTERACTIVE_OUTPUT")}
-else {if (save.detrend1) saveDetrendJPG (rwl, detrend1, folderName = "FirstDetrend", detrend.method=first.detrending.method)}
+SaveDetrendJPG = function (rwl, detrend, folderName = "Detrend", work.dir = NULL, 
+    detrend.method = "", select.series = 1:(ncol(rwl))) 
+{
+
+
+if (length(detrend.method)==1) detrend.method<-rep(detrend.method,ncol(rwl))
+    if (is.null(work.dir)) 
+        work.dir = getwd()
+    dir.create(folderName, showWarnings = FALSE)
+    setwd(folderName)
+            seriesnames = colnames(rwl)
+        yr.vec = as.numeric(rownames(rwl))
+    for (i in select.series) {
+
+        jpeg(paste(seriesnames[i], ".jpg", sep = ""), width = 1200, 
+            height = 600, quality = 100)
+        plot(yr.vec, rwl[, i], type = "l", xlab = "Years", ylab = "", 
+            main = seriesnames[i], las = 1, col = "blue")
+        mtext(paste(detrend.method[i], sep = ""), line = 0.5, side = 3, 
+            adj = 1, cex = 0.9, col = "blue", font = 1)
+        mtext("Detrender", line = 0.5, side = 3, adj = 0, cex = 0.9, 
+            col = "blue", font = 1)
+        lines(yr.vec, detrend[, i], col = 2)
+        dev.off()
+    }
+    setwd(work.dir)
 }
 
-if(min(detrend1, na.rm=TRUE)<0) {
-cat("\n")
-TrwLessThan(detrend1, TRW=0.01) }
 
-rw1=rwl/detrend1
-write.rwl(detrend1, fname= paste(file.name, "cv1", sep="."),long.names=TRUE)
-write.rwl(rw1, fname= paste(file.name, "in1", sep="."),long.names=TRUE)
 
-#if (save.detrend1) saveDetrendJPG (rwl, detrend1, folderName = "FirstDetrend", detrend.method=first.detrending.method)
-RwlInfo(rw1, print=TRUE)
 
-if (makeSecondDetrending) {
-cat("\nSecond detrending [",second.detrending.method, "]\n", sep="")
-detrend2= apply(rw1, 2, RemoveTrend, method=method2, BandwidthPerc=nPerc2 , Bandwidth = n2, P=p2)
 
-if (save.detrend2) saveDetrendJPG (rw1, detrend2, folderName = "SecondDetrend", detrend.method=second.detrending.method)########
-
-if (interactive.detrend) {InteractiveDetrending (rw1, detrend2, folderName = "SecondDetrend", method=method2,  n=n2, nPerc=nPerc2, p=p1)
-if (.get("DETRENDING_INTERACTIVE_FLAG")) {detrend2=.get("DETRENDING_INTERACTIVE_OUTPUT")}
-else {if (save.detrend2) saveDetrendJPG (rw1, detrend2, folderName = "SecondDetrend", detrend.method=second.detrending.method)}
-#rm(DETRENDING_INTERACTIVE_OUTPUT, envir = .GlobalEnv )
-#rm(DETRENDING_INTERACTIVE_FLAG, envir = .GlobalEnv )
-#rm(DETRENDING_INTERACTIVE_OUTPUT_CHANGE, envir = .GlobalEnv )
-}
-
-if(min(detrend2, na.rm=TRUE)<0) {cat("\n")
- TrwLessThan(detrend2, TRW=0.01)
- }
-rw2=rw1/detrend2
-
-        #if (save.detrend2)  saveDetrendJPG (rw1, detrend2, folderName = "SecondDetrend", detrend.method=second.detrending.method)
-            write.rwl(detrend2, fname= paste(file.name, "cv2", sep="."),long.names=TRUE)
-            write.rwl(rw2, fname= paste(file.name, "in2", sep="."),long.names=TRUE)
-            RwlInfo(rw2, print=TRUE) }
-        else {
-             rw2<-rw1 }
+        cat("\nDETRENDING\n\nFirst detrending [", first.detrending.method, 
+            "]\n", sep = "")
+            
+            
+       # eval(parse(text = paste("assign('detrend1', apply(rwl, 2, detrendeR:::RemoveTrend, method=method1, BandwidthPerc=nPerc1, Bandwidth = n1, P=p1))", 
+       #    sep = "")), envir = .GlobalEnv)
+			
+        detrend1 = apply(rwl, 2, detrendeR:::RemoveTrend, method = method1, 
+            BandwidthPerc = nPerc1, Bandwidth = n1, P = p1)
+      #  if (save.detrend1) 
+      #      saveDetrendJPG(rwl, detrend1, folderName = "FirstDetrend", 
+      #         detrend.method = first.detrending.method)
+        if (interactive.detrend) {
+           # eval(parse(text = paste("detrendeR:::InteractiveDetrending(rwl, detrend1, , folderName = 'FirstDetrend', method=method1,  n=n1, nPerc=nPerc1, p=p1)", 
+            #    sep = "")), envir = .GlobalEnv)
+				
+          detrendeR:::InteractiveDetrending(rwl, detrend1, folderName = "FirstDetrend", 
+                method = method1, n = n1, nPerc = nPerc1, p = p1)
+         
+            if (detrendeR:::.get("DETRENDING_INTERACTIVE_FLAG")) {
+            #   eval(parse(text = paste("detrend1<<-detrendeR:::.get('DETRENDING_INTERACTIVE_OUTPUT')", 
+            #      sep = "")), envir = .GlobalEnv)
+        
+                detrend1 = detrendeR:::.get("DETRENDING_INTERACTIVE_OUTPUT")
+  								
+                first.detrending.method <<- as.vector(detrendeR:::.get("DETRENDING_INTERACTIVE_OUTPUT_CHANGE")[-1,3])
+                first.detrending.method
+                
+            }
+           # else {
+           #     if (save.detrend1) 
+           #       saveDetrendJPG(rwl, detrend1, folderName = "FirstDetrend", 
+           #         detrend.method = first.detrending.method)
+           # }
         }
-else { rw2<-rwl }
+
+		 if (save.detrend1) {
+		 
+                  SaveDetrendJPG(rwl, detrend1, folderName = "FirstDetrend", 
+                    detrend.method = first.detrending.method)
+		}
+        if (min(detrend1, na.rm = TRUE) < 0) {
+            cat("\n")
+            TrwLessThan(detrend1, TRW = 0.01)
+        }
+        rw1 = rwl/detrend1
+        write.rwl(as.data.frame(detrend1), fname = paste(file.name, "cv1", sep = "."), 
+            long.names = TRUE)
+        write.rwl(rw1, fname = paste(file.name, "in1", sep = "."), 
+            long.names = TRUE)
+        RwlInfo(rw1, print = TRUE)
+		
+        if (makeSecondDetrending) {
+            cat("\nSecond detrending [", second.detrending.method, 
+                "]\n", sep = "")
+            #eval(parse(text = paste("assign('detrend2', apply(rw1, 2, detrendeR:::RemoveTrend, method=method2, BandwidthPerc=nPerc2, Bandwidth = n2, P=p2))", 
+            #sep = "")), envir = .GlobalEnv)
+            
+			detrend2 = apply(rw1, 2, detrendeR:::RemoveTrend, method = method2, 
+                BandwidthPerc = nPerc2, Bandwidth = n2, P = p2)
+          #  if (save.detrend2) 
+          #      saveDetrendJPG(rw1, detrend2, folderName = "SecondDetrend", 
+          #        detrend.method = second.detrending.method)
+            if (interactive.detrend) {
+ #eval(parse(text = paste("detrendeR:::InteractiveDetrending(rw1, detrend2, , folderName = 'SeconDetrend', method=method2,  n=n2, nPerc=nPerc2, p=p2)", 
+ #               sep = "")), envir = .GlobalEnv)
+				
+      
+             detrendeR:::InteractiveDetrending(rw1, detrend2, folderName = "SecondDetrend", 
+                  method = method2, n = n2, nPerc = nPerc2, p = p1)
+                if (detrendeR:::.get("DETRENDING_INTERACTIVE_FLAG")) {
+                  detrend2 = detrendeR:::.get("DETRENDING_INTERACTIVE_OUTPUT")
+                  second.detrending.method = as.vector(detrendeR:::.get("DETRENDING_INTERACTIVE_OUTPUT_CHANGE")[-1,3])
+                }
+          #      else {
+          #        if (save.detrend2) 
+          #          saveDetrendJPG(rw1, detrend2, folderName = "SecondDetrend", 
+          #            detrend.method = second.detrending.method)
+          #      }
+            }
+        if (save.detrend2) 
+                     SaveDetrendJPG(rw1, detrend2, folderName = "SecondDetrend", 
+                      detrend.method = second.detrending.method)
+            if (min(detrend2, na.rm = TRUE) < 0) {
+                cat("\n")
+                TrwLessThan(detrend2, TRW = 0.01)
+            }
+            rw2 = rw1/detrend2
+            write.rwl(as.data.frame(detrend2), fname = paste(file.name, "cv2", 
+                sep = "."), long.names = TRUE)
+            write.rwl(rw2, fname = paste(file.name, "in2", sep = "."), 
+                long.names = TRUE)
+            RwlInfo(rw2, print = TRUE)
+        } else {
+            rw2 <- rw1
+        }
+    } else {
+        rw2 <- rwl
+    }
 
 # Save standard chronology
 crnStd <- Chron(rw2, prefix = paste(file.name, "STD", sep="-"), biweight = .get("biweightMean"), prewhiten = FALSE,
@@ -123,7 +208,7 @@ if (makeAr){
             PrintPlotChrono(crnRes, rwl=res, file.name = file.name, crono.type="RES" )
             cat("\nResidual series\n")
             RwlInfo(res, print=TRUE)
-            write.rwl(res, fname= paste(file.name, "res", sep="."),long.names=TRUE)
+            write.rwl(as.data.frame(res), fname= paste(file.name, "res", sep="."),long.names=TRUE)
   if (run.win.analysis){cat("\nRunning analysis of residual series\n\n")
             runWinRes<-Run.Win(res, winLength=winLength, stc=stc, step = stepWin)
             for (i in c(0.75, 0.80, 0.85, 0.90)) {EPS.resume(runWinRes, EPS=i)}}

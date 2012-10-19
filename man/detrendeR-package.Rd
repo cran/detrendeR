@@ -12,7 +12,7 @@ This packages contains a Graphical User Interface to perform some standard tree-
 \tabular{ll}{
 Package: \tab detrendeR\cr
 Type: \tab Package\cr
-Version: \tab 1.0.3\cr
+Version: \tab 1.0.4\cr
 License: \tab GPL\cr
 }
 }

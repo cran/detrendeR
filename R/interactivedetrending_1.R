@@ -251,7 +251,7 @@ tkconfigure(bandwidth.p.scale, from=0.05, to=2)
 tkconfigure(p.scale, from=0.0, to=1)
 
 #bandwidth.p.scale
-      tkbind(bandwidth.p.scale, "<ButtonRelease-1>", function(...) re.draw())
+     tkbind(bandwidth.p.scale, "<ButtonRelease-1>", function(...) re.draw())
      tkbind(bandwidth.p.scale, "<ButtonRelease-2>", function(...) re.draw())
      tkbind(bandwidth.p.scale, "<Left>", function(...) re.draw())
      tkbind(bandwidth.p.scale, "<Right>", function(...) re.draw()) 
@@ -288,6 +288,7 @@ tkbind(ttt, "<Destroy>", function() tclvalue(done) <- 2)
     #try(dev.off(.Internal(dev.cur())),silent=T) 
       try(dev.off(as.vector(dev.cur())),silent=T)
     .assign("DETRENDING_INTERACTIVE_FLAG", TRUE)
+    .assign("DETRENDING_INTERACTIVE_OUTPUT_CHANGE",DETRENDING_INTERACTIVE_OUTPUT_CHANGE)
     #.assign("DETRENDING_INTERACTIVE_OUTPUT", DETRENDING_INTERACTIVE_OUTPUT)
   }
 }
