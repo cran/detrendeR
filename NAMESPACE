@@ -1,5 +1,11 @@
 
-import(tcltk)
+import("dplR", "tcltk", "tkRplotR")
+importFrom("grDevices", "dev.cur", "dev.off", "jpeg")
+importFrom("graphics", "abline", "axis", "box", "lines", "matplot",
+               "mtext", "par", "title")
+importFrom("stats", "acf", "ar", "coef", "cor", "lm", "median",
+               "na.omit", "nls", "predict", "sd")
+importFrom("utils", "read.fwf", "write.table", "edit")
 
 export(detrender,
 	RwlInfo,
